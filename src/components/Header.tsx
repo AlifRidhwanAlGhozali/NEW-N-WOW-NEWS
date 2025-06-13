@@ -13,6 +13,7 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
   const location = useLocation();
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState<any>(null);
+  const [searchInput, setSearchInput] = React.useState("");
 
   React.useEffect(() => {
     const user = localStorage.getItem("currentUser");
@@ -20,10 +21,27 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
     else setCurrentUser(null);
   }, []);
 
+  React.useEffect(() => {
+    // Sync search input with query string
+    const params = new URLSearchParams(location.search);
+    setSearchInput(params.get("search") || "");
+  }, [location.search]);
+
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
     setCurrentUser(null);
     navigate("/login");
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams(location.search);
+    if (searchInput) {
+      params.set("search", searchInput);
+    } else {
+      params.delete("search");
+    }
+    navigate({ pathname: location.pathname, search: params.toString() });
   };
 
   return (
@@ -42,18 +60,20 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
           </button>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-md mx-8">
+          <form className="flex-1 max-w-md mx-8" onSubmit={handleSearch}>
             <div className="relative">
               <input
                 type="text"
                 placeholder="Cari berita..."
                 className="w-full px-4 py-2 rounded-full bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchInput}
+                onChange={e => setSearchInput(e.target.value)}
               />
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black rounded-full p-2">
+              <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black rounded-full p-2">
                 <Search className="text-white w-4 h-4" />
-              </div>
+              </button>
             </div>
-          </div>
+          </form>
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-3">

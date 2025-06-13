@@ -6,10 +6,12 @@ import NewsPagination from "../components/NewsPagination";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 4;
+const MAX_PAGES = 10;
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,6 +25,9 @@ const Index = () => {
     } else {
       setSelectedCategory("Semua");
     }
+    // Ambil search dari query string jika ada
+    const search = params.get("search");
+    setSearchTerm(search || "");
   }, [location.search]);
 
   useEffect(() => {
@@ -122,17 +127,25 @@ const Index = () => {
     ];
   }
 
-  const filteredNews =
-    selectedCategory === "Semua"
-      ? allNews
-      : allNews.filter((news) => news.category === selectedCategory);
+  // Filter by search term
+  const filteredNews = (selectedCategory === "Semua"
+    ? allNews
+    : allNews.filter((news) => news.category === selectedCategory)
+  ).filter((news) =>
+    news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    news.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Pagination logic
-  const totalPages = Math.ceil(filteredNews.length / ITEMS_PER_PAGE);
+  let totalPages = Math.ceil(filteredNews.length / ITEMS_PER_PAGE);
+  if (totalPages > MAX_PAGES) totalPages = MAX_PAGES;
   const paginatedNews = filteredNews.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  // Rekomendasi berita untuk sidebar kanan (ambil 8 teratas dari filteredNews)
+  const recommendedNews = filteredNews.slice(0, 8);
 
   // Tentukan featuredNews yang sesuai kategori
   let showFeatured: any = null;
@@ -182,7 +195,8 @@ const Index = () => {
               </div>
               {/* Sidebar - Right Column */}
               <div className="space-y-6">
-                {filteredNews.slice(0, 8).map((news, index) => (
+                <div className="font-bold text-lg mb-2">Rekomendasi Berita</div>
+                {recommendedNews.map((news, index) => (
                   <NewsCard key={index} {...news} />
                 ))}
               </div>

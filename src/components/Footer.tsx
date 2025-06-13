@@ -1,6 +1,8 @@
 import { Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="bg-black text-white py-8">
       <div className="container mx-auto px-4">
@@ -8,9 +10,15 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mt-8 pt-8 border-t border-gray-800">
           {/* Logo and Tagline */}
           <div className="flex items-center space-x-4 mb-4 md:mb-0">
-            <div className="text-2xl font-bold text-red-600">
+            <button
+              className="text-2xl font-bold text-red-600 focus:outline-none"
+              style={{ background: "none", border: "none", padding: 0, lineHeight: 1 }}
+              onClick={() => navigate("/")}
+              aria-label="Beranda NOW WOW"
+              type="button"
+            >
               NOW<br />WOW
-            </div>
+            </button>
             <p className="text-gray-300">Berita Terbaru, Hanya Sekali Klik.</p>
           </div>
 

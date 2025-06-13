@@ -182,7 +182,7 @@ const Index = () => {
               </div>
               {/* Sidebar - Right Column */}
               <div className="space-y-6">
-                {paginatedNews.map((news, index) => (
+                {filteredNews.slice(0, 8).map((news, index) => (
                   <NewsCard key={index} {...news} />
                 ))}
               </div>

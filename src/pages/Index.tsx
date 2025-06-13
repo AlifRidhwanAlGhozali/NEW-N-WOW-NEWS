@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import NewsCard from "../components/NewsCard";
 import FeaturedNewsGrid from "../components/FeaturedNewsGrid";
+import NewsPagination from "../components/NewsPagination";
 import { useLocation, useNavigate } from "react-router-dom";
+
+const ITEMS_PER_PAGE = 4;
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -20,6 +24,10 @@ const Index = () => {
       setSelectedCategory("Semua");
     }
   }, [location.search]);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset ke halaman 1 jika kategori berubah
+  }, [selectedCategory]);
 
   const newsData = [
     {
@@ -119,6 +127,13 @@ const Index = () => {
       ? allNews
       : allNews.filter((news) => news.category === selectedCategory);
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredNews.length / ITEMS_PER_PAGE);
+  const paginatedNews = filteredNews.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   // Tentukan featuredNews yang sesuai kategori
   let showFeatured: any = null;
   if (selectedCategory === "Semua" || selectedCategory === "Politik") {
@@ -139,7 +154,7 @@ const Index = () => {
               {/* Featured News - Left Column */}
               <div className="lg:col-span-2">
                 {/* Rekomendasi berita besar (grid) */}
-                <FeaturedNewsGrid newsList={filteredNews.slice(0, 4)} />
+                <FeaturedNewsGrid newsList={paginatedNews.slice(0, 4)} />
                 {/* Article Content */}
                 <div className="bg-white rounded-lg shadow-lg mt-6 p-6">
                   <p className="text-gray-700 mb-4 text-lg font-semibold">
@@ -154,14 +169,20 @@ const Index = () => {
                   <p className="text-gray-700 mb-4">
                     <span className="font-semibold text-blue-700">Tips:</span> Gunakan filter kategori di atas untuk menyesuaikan rekomendasi berita sesuai minat Anda.
                   </p>
-                  <p className="text-gray-700 mb-6 italic">
+                  <p className="text-black mb-6 italic">
                     "Membaca berita adalah jendela dunia. Jadilah yang pertama tahu, dan dapatkan wawasan terbaik hanya di NOW WOW News!"
                   </p>
+                  <NewsPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPrevious={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  />
                 </div>
               </div>
               {/* Sidebar - Right Column */}
               <div className="space-y-6">
-                {filteredNews.map((news, index) => (
+                {paginatedNews.map((news, index) => (
                   <NewsCard key={index} {...news} />
                 ))}
               </div>

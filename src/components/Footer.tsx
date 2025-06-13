@@ -1,13 +1,9 @@
 import { Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
-import NewsPagination from "./NewsPagination";
 
 const Footer = () => {
   return (
     <footer className="bg-black text-white py-8">
       <div className="container mx-auto px-4">
-        {/* Pagination */}
-        <NewsPagination />
-        
         {/* Footer Content */}
         <div className="flex flex-col md:flex-row items-center justify-between mt-8 pt-8 border-t border-gray-800">
           {/* Logo and Tagline */}

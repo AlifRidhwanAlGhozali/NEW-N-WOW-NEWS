@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import NewsCard from "../components/NewsCard";
-import FeaturedNews from "../components/FeaturedNews";
+import FeaturedNewsGrid from "../components/FeaturedNewsGrid";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Index = () => {
@@ -138,7 +138,8 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Featured News - Left Column */}
               <div className="lg:col-span-2">
-                {showFeatured && <FeaturedNews {...showFeatured} />}
+                {/* Rekomendasi berita besar (grid) */}
+                <FeaturedNewsGrid newsList={filteredNews.slice(0, 4)} />
                 {/* Article Content */}
                 <div className="bg-white rounded-lg shadow-lg mt-6 p-6">
                   <p className="text-gray-700 mb-4 text-lg font-semibold">

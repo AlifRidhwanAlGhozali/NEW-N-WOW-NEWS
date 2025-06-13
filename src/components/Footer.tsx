@@ -1,4 +1,3 @@
-
 import { Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
 import NewsPagination from "./NewsPagination";
 
@@ -24,13 +23,13 @@ const Footer = () => {
             <a href="#" className="text-gray-400 hover:text-white transition-colors">
               <Facebook className="w-6 h-6" />
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <a href="https://www.linkedin.com/in/alif-ridhwan-al-ghozali/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Linkedin className="w-6 h-6" />
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <a href="https://www.youtube.com/@alifridhwanalghozali424" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Youtube className="w-6 h-6" />
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <a href="https://www.instagram.com/arilalghozali/?hl=id" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
               <Instagram className="w-6 h-6" />
             </a>
           </div>

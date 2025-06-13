@@ -112,7 +112,12 @@ const DetailNews = () => {
               </div>
             ))}
             {user ? (
-              <form className="mt-2 flex gap-2" onSubmit={handleAddComment}>
+              <form className="mt-2 flex gap-2 items-center" onSubmit={handleAddComment}>
+                {user.photo ? (
+                  <img src={user.photo} alt={user.fullName} className="w-8 h-8 rounded-full object-cover" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-base text-gray-500">{user.fullName ? user.fullName[0] : "?"}</div>
+                )}
                 <input
                   type="text"
                   className="flex-1 border rounded px-2 py-1 text-sm"

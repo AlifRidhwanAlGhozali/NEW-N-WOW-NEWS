@@ -31,9 +31,15 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-3">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-red-600">
+          <button
+            className="text-2xl font-bold text-red-600 focus:outline-none"
+            style={{ background: "none", border: "none", padding: 0, lineHeight: 1 }}
+            onClick={() => navigate("/")}
+            aria-label="Beranda NOW WOW"
+            type="button"
+          >
             NOW<br />WOW
-          </Link>
+          </button>
 
           {/* Search Bar */}
           <div className="flex-1 max-w-md mx-8">
@@ -59,7 +65,11 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
                     ? "bg-red-600 text-white border-red-600"
                     : "bg-white text-gray-800 border-gray-300 hover:bg-red-50"
                 }`}
-                onClick={() => onCategoryChange && onCategoryChange(cat)}
+                onClick={() => {
+                  if (cat === "Semua") navigate("/");
+                  else navigate(`/?kategori=${cat.toLowerCase()}`);
+                  if (onCategoryChange) onCategoryChange(cat);
+                }}
                 type="button"
               >
                 {cat}

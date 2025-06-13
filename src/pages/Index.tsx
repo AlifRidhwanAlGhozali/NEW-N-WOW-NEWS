@@ -1,10 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import NewsCard from "../components/NewsCard";
 import FeaturedNews from "../components/FeaturedNews";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Sync kategori dari query string jika ada
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const kategori = params.get("kategori");
+    if (kategori) {
+      const cap = kategori.charAt(0).toUpperCase() + kategori.slice(1).toLowerCase();
+      setSelectedCategory(cap);
+    } else {
+      setSelectedCategory("Semua");
+    }
+  }, [location.search]);
 
   const newsData = [
     {
@@ -27,6 +42,56 @@ const Index = () => {
       excerpt: "Nilai tukar rupiah menunjukkan penguatan signifikan...",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop",
       categoryColor: "text-red-600"
+    },
+    // Berita tambahan agar lebih banyak rekomendasi
+    {
+      category: "Teknologi",
+      title: "Startup Lokal Raih Pendanaan Besar",
+      excerpt: "Startup Indonesia mendapatkan investasi dari luar negeri...",
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop",
+      categoryColor: "text-blue-600"
+    },
+    {
+      category: "Olahraga",
+      title: "Atlet Muda Pecahkan Rekor Nasional",
+      excerpt: "Prestasi membanggakan dari atlet muda Indonesia...",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
+      categoryColor: "text-green-600"
+    },
+    {
+      category: "Bisnis",
+      title: "Ekspor UMKM Tembus Pasar Eropa",
+      excerpt: "UMKM Indonesia berhasil menembus pasar ekspor Eropa...",
+      image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&h=300&fit=crop",
+      categoryColor: "text-yellow-600"
+    },
+    {
+      category: "Politik",
+      title: "Debat Capres Berlangsung Sengit",
+      excerpt: "Debat calon presiden berlangsung dengan berbagai argumen menarik...",
+      image: "https://images.unsplash.com/photo-1503676382389-4809596d5290?w=400&h=300&fit=crop",
+      categoryColor: "text-purple-600"
+    },
+    {
+      category: "Teknologi",
+      title: "Pemerintah Dorong Digitalisasi Desa",
+      excerpt: "Program digitalisasi desa mulai diterapkan di berbagai daerah...",
+      image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=400&h=300&fit=crop",
+      categoryColor: "text-indigo-600"
+    },
+    {
+      category: "Olahraga",
+      title: "Indonesia Tuan Rumah Kejuaraan Asia",
+      excerpt: "Kejuaraan olahraga Asia akan digelar di Indonesia tahun ini...",
+      image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=300&fit=crop",
+      categoryColor: "text-pink-600"
+    },
+    {
+      category: "Bisnis",
+      title: "Pasar Saham Menguat di Awal Pekan",
+      excerpt: "Indeks saham Indonesia dibuka menguat pada perdagangan awal pekan...",
+      image: "https://images.unsplash.com/photo-1461344577544-4e5dc9487184?w=400&h=300&fit=crop",
+      categoryColor: "text-orange-600"
     }
   ];
 
@@ -76,21 +141,20 @@ const Index = () => {
                 {showFeatured && <FeaturedNews {...showFeatured} />}
                 {/* Article Content */}
                 <div className="bg-white rounded-lg shadow-lg mt-6 p-6">
-                  <p className="text-gray-700 mb-4">
-                    Body text for your whole article or post. We'll put in some lorem ipsum to show how a filled-out page might look:
+                  <p className="text-gray-700 mb-4 text-lg font-semibold">
+                    Temukan berita pilihan dan rekomendasi menarik setiap hari!
                   </p>
                   <p className="text-gray-700 mb-4">
-                    Excepteur efficient emerging, minim veniam anim aute carefully curated Ginza conversation exquisite perfect nostrud nisi intricate Content. Qui international first-class nulla ut. Punctual adipisicing, essential lovely queen tempor eiusmod irure. Exclusive izakaya charming Scandinavian impeccable aute quality of life soft power pariatur Melbourne occaecat discerning. Qui wardrobe aliquip, et Porter destination Toto remarkable officia Helsinki excepteur Basset hound. Zürich sleepy perfect consectetur.
+                    Portal ini menyajikan berita-berita terpopuler, update terkini, dan insight mendalam dari berbagai kategori. Klik <span className="text-red-600 font-semibold">Baca Selengkapnya</span> pada setiap berita untuk mendapatkan informasi lengkap, analisis, dan fakta menarik yang tidak Anda temukan di tempat lain.
                   </p>
                   <p className="text-gray-700 mb-4">
-                    Exquisite sophisticated iconic cutting-edge laborum deserunt Addis Ababa esse bureaux cupidatat id minim. Sharp classic the best commodo nostrud delightful. Conversation aute Rochester id. Qui sunt remarkable deserunt intricate airport handsome K-pop excepteur classic esse Asia-Pacific laboris.
+                    Jangan lewatkan berita eksklusif, kisah inspiratif, dan liputan khusus yang kami hadirkan untuk Anda. Setiap hari, selalu ada berita baru yang layak untuk Anda baca!
                   </p>
                   <p className="text-gray-700 mb-4">
-                    Excepteur efficient emerging, minim veniam anim aute carefully curated Ginza conversation exquisite perfect nostrud nisi intricate Content. Qui international first-class nulla ut. Punctual adipisicing, essential lovely queen tempor eiusmod irure. Exclusive izakaya charming Scandinavian impeccable aute quality of life soft power pariatur Melbourne occaecat discerning. Qui wardrobe aliquip, et Porter destination Toto remarkable officia Helsinki excepteur Basset hound. Zürich sleepy perfect consectetur.
+                    <span className="font-semibold text-blue-700">Tips:</span> Gunakan filter kategori di atas untuk menyesuaikan rekomendasi berita sesuai minat Anda.
                   </p>
-                  <p className="text-gray-700 mb-6">
-                    Exquisite sophisticated iconic cutting-edge laborum deserunt Addis Ababa esse bureaux cupidatat id minim. Sharp classic the best commodo nostrud delightful. Conversation aute Rochester id. Qui sunt remarkable deserunt intricate airport handsome K-pop excepteur classic esse Asia-Pacific laboris.
-                    Exquisite sophisticated iconic cutting-edge laborum deserunt Addis Ababa esse bureaux cupidatat id minim. Sharp classic the best commodo nostrud delightful. Conversation aute Rochester id. Qui sunt remarkable deserunt intricate airport handsome K-pop excepteur classic esse Asia-Pacific laboris.
+                  <p className="text-gray-700 mb-6 italic">
+                    "Membaca berita adalah jendela dunia. Jadilah yang pertama tahu, dan dapatkan wawasan terbaik hanya di NOW WOW News!"
                   </p>
                 </div>
               </div>

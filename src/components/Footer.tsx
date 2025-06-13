@@ -51,7 +51,8 @@ const Footer = () => {
         {/* Baris copyright dan info tambahan */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-300 opacity-80">
           <div>
-            &copy; {new Date().getFullYear()} NOW WOW News. All rights reserved.
+            &copy; {new Date().getFullYear()} NOW WOW News. All rights reserved.<br />
+            <span className="text-xs text-gray-400">Creator: Alif Ridhwan Al Ghozali</span>
           </div>
           <div className="flex gap-4 mt-2 md:mt-0">
             <button onClick={() => navigate('/kebijakan-privasi')} className="hover:underline bg-transparent border-none p-0 m-0 text-inherit cursor-pointer">Kebijakan Privasi</button>

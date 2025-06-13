@@ -50,12 +50,10 @@ const Login = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
           {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="text-3xl font-bold text-red-600 mb-4">
+          <div className="flex items-center justify-center mb-8">
+            <div className="text-3xl font-bold text-red-600 select-none">
               NOW<br />WOW
             </div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">Welcome Back</h2>
-            <p className="text-gray-600">Sign in to continue to your account</p>
           </div>
 
           {/* Form */}

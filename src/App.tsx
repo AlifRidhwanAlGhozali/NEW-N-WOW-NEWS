@@ -9,6 +9,9 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import DetailNews from "./pages/DetailNews";
 import Akun from "./pages/Akun";
+import KebijakanPrivasi from "./pages/KebijakanPrivasi";
+import SyaratKetentuan from "./pages/SyaratKetentuan";
+import Kontak from "./pages/Kontak";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +27,9 @@ const App = () => (
           <Route path="/akun" element={<Akun />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
+          <Route path="/syarat-ketentuan" element={<SyaratKetentuan />} />
+          <Route path="/kontak" element={<Kontak />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

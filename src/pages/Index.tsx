@@ -105,7 +105,72 @@ const Index = () => {
       excerpt: "Indeks saham Indonesia dibuka menguat pada perdagangan awal pekan...",
       image: "https://images.unsplash.com/photo-1461344577544-4e5dc9487184?w=400&h=300&fit=crop",
       categoryColor: "text-orange-600"
-    }
+    },
+    // --- Breaking News ---
+    {
+      category: "Breaking News",
+      title: "Gempa Besar Guncang Wilayah Barat Indonesia",
+      excerpt: "Gempa berkekuatan 7.2 SR mengguncang wilayah barat Indonesia, masyarakat diimbau tetap waspada...",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
+      categoryColor: "text-red-700"
+    },
+    {
+      category: "Trending",
+      title: "Video Viral: Aksi Heroik di Tengah Banjir",
+      excerpt: "Sebuah video aksi penyelamatan viral di media sosial, menuai pujian netizen...",
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop",
+      categoryColor: "text-pink-600"
+    },
+    {
+      category: "Update",
+      title: "Update Harga BBM Hari Ini",
+      excerpt: "Pemerintah mengumumkan update harga BBM terbaru yang berlaku mulai hari ini...",
+      image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=400&h=300&fit=crop",
+      categoryColor: "text-blue-600"
+    },
+    {
+      category: "Fakta",
+      title: "Fakta Unik: Indonesia Negara dengan Ribuan Pulau",
+      excerpt: "Tahukah kamu? Indonesia memiliki lebih dari 17.000 pulau yang tersebar dari Sabang sampai Merauke...",
+      image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=400&h=300&fit=crop",
+      categoryColor: "text-yellow-600"
+    },
+    {
+      category: "Edukasi",
+      title: "Tips Belajar Efektif di Era Digital",
+      excerpt: "Simak tips belajar efektif dan produktif di era digital untuk pelajar dan mahasiswa...",
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop",
+      categoryColor: "text-green-600"
+    },
+    {
+      category: "Inspirasi",
+      title: "Kisah Inspiratif: Anak Desa Raih Beasiswa Luar Negeri",
+      excerpt: "Perjuangan seorang anak desa yang berhasil meraih beasiswa ke universitas ternama dunia...",
+      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=300&fit=crop",
+      categoryColor: "text-purple-600"
+    },
+    // --- Tag lain ---
+    {
+      category: "Viral",
+      title: "Fenomena Challenge Baru di Media Sosial",
+      excerpt: "Challenge baru di TikTok dan Instagram ramai diikuti anak muda...",
+      image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=300&fit=crop",
+      categoryColor: "text-pink-700"
+    },
+    {
+      category: "Ekonomi",
+      title: "Ekonomi Indonesia Tumbuh di Kuartal Kedua",
+      excerpt: "Pertumbuhan ekonomi Indonesia menunjukkan tren positif di kuartal kedua tahun ini...",
+      image: "https://images.unsplash.com/photo-1461344577544-4e5dc9487184?w=400&h=300&fit=crop",
+      categoryColor: "text-orange-700"
+    },
+    {
+      category: "Nasional",
+      title: "Hari Besar Nasional Diperingati Meriah",
+      excerpt: "Berbagai daerah di Indonesia memperingati hari besar nasional dengan beragam acara...",
+      image: "https://images.unsplash.com/photo-1503676382389-4809596d5290?w=400&h=300&fit=crop",
+      categoryColor: "text-blue-700"
+    },
   ];
 
   const featuredNews = {
@@ -147,6 +212,16 @@ const Index = () => {
   // Rekomendasi berita untuk sidebar kanan (ambil 8 teratas dari filteredNews)
   const recommendedNews = filteredNews.slice(0, 8);
 
+  // Quotes inspiratif harian
+  const dailyQuotes = [
+    "Berita adalah jendela dunia. Jadilah yang pertama tahu!",
+    "Membaca berita, menambah wawasan.",
+    "Setiap hari ada cerita baru untukmu.",
+    "Jangan lewatkan update penting hari ini!",
+    "Informasi adalah kekuatan."
+  ];
+  const randomQuote = dailyQuotes[Math.floor(Math.random() * dailyQuotes.length)];
+
   // Tentukan featuredNews yang sesuai kategori
   let showFeatured: any = null;
   if (selectedCategory === "Semua" || selectedCategory === "Politik") {
@@ -156,6 +231,17 @@ const Index = () => {
     const first = newsData.find((n) => n.category === selectedCategory);
     if (first) showFeatured = first;
   }
+
+  // Handler untuk klik hashtag trending/tag highlight
+  const handleTagClick = (tag: string) => {
+    // Hilangkan tanda # jika ada
+    const cleanTag = tag.replace('#', '').toLowerCase();
+    setSearchTerm(cleanTag);
+    // Update query string agar sinkron dengan fitur search
+    const params = new URLSearchParams(location.search);
+    params.set('search', cleanTag);
+    navigate({ pathname: location.pathname, search: params.toString() });
+  };
 
   return (
     <Layout onCategoryChange={setSelectedCategory} selectedCategory={selectedCategory}>
@@ -191,6 +277,30 @@ const Index = () => {
                     onPrevious={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   />
+                  {/* Fitur tambahan di margin bawah */}
+                  <div className="mt-10">
+                    <div className="bg-gradient-to-r from-red-500 via-yellow-400 to-pink-500 rounded-xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-between gap-6 animate-fade-in">
+                      <div className="flex-1">
+                        <div className="text-2xl font-bold text-white mb-2">Berita Pilihan Hari Ini</div>
+                        <div className="text-white mb-2">Jangan lewatkan breaking news dan berita trending yang selalu update setiap hari. Dapatkan insight dan fakta menarik hanya di NOW WOW News!</div>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {["#breakingnews", "#trending", "#update", "#fakta", "#edukasi", "#inspirasi"].map(tag => (
+                            <span
+                              key={tag}
+                              className="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-semibold border border-white cursor-pointer hover:bg-opacity-40 transition-colors"
+                              onClick={() => handleTagClick(tag)}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=120&h=120&fit=crop" alt="Highlight" className="rounded-full border-4 border-white shadow-lg mb-2 w-24 h-24 object-cover" />
+                        <span className="text-white text-sm font-semibold">Highlight Hari Ini</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               {/* Sidebar - Right Column */}
@@ -199,6 +309,38 @@ const Index = () => {
                 {recommendedNews.map((news, index) => (
                   <NewsCard key={index} {...news} />
                 ))}
+                <div className="bg-gradient-to-r from-red-500 to-yellow-400 text-white rounded-lg p-4 shadow-lg mt-8 animate-pulse">
+                  <div className="font-semibold text-base mb-2">Quotes Hari Ini</div>
+                  <div className="italic">{randomQuote}</div>
+                </div>
+                {/* Fitur: Trending Tag */}
+                <div className="bg-white rounded-lg shadow p-4 flex flex-col items-center mt-8">
+                  <div className="font-bold text-blue-700 text-lg mb-2">Trending Tag</div>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {["#politik", "#olahraga", "#teknologi", "#bisnis", "#viral", "#inspirasi", "#ekonomi", "#nasional"].map(tag => (
+                      <span
+                        key={tag}
+                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold cursor-pointer hover:bg-blue-200 transition-colors"
+                        onClick={() => handleTagClick(tag)}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                {/* Fitur: Fakta Unik */}
+                <div className="bg-yellow-100 rounded-lg shadow p-4 flex flex-col items-center mt-8">
+                  <div className="font-bold text-yellow-700 text-lg mb-2">Fakta Unik Hari Ini</div>
+                  <div className="text-gray-700 text-center text-sm">
+                    {{
+                      0: "Tahukah kamu? Indonesia adalah negara kepulauan terbesar di dunia!",
+                      1: "Fakta: Berita online kini menjadi sumber utama informasi masyarakat.",
+                      2: "Teknologi AI sudah digunakan di berbagai media berita dunia.",
+                      3: "Olahraga dapat meningkatkan konsentrasi dan produktivitas.",
+                      4: "UMKM Indonesia berkontribusi besar pada ekonomi nasional."
+                    }[Math.floor(Math.random() * 5)]}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -69,6 +69,11 @@ const DetailNews = () => {
     setCommentText("");
   };
 
+  const handleDeleteComment = (index: number) => {
+    if (!user) return;
+    setComments(prev => prev.filter((c, i) => i !== index || c.user.name !== user.fullName));
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
@@ -91,11 +96,19 @@ const DetailNews = () => {
                 ) : (
                   <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-500">{c.user.name[0]}</div>
                 )}
-                <div>
+                <div className="flex-1">
                   <div className="text-xs font-semibold">{c.user.name}</div>
                   <div className="text-xs text-gray-700">{c.text}</div>
                   <div className="text-[10px] text-gray-400">{new Date(c.date).toLocaleString()}</div>
                 </div>
+                {user && c.user.name === user.fullName && (
+                  <button
+                    className="ml-2 text-xs text-red-600 hover:underline"
+                    onClick={() => handleDeleteComment(i)}
+                  >
+                    Hapus
+                  </button>
+                )}
               </div>
             ))}
             {user ? (

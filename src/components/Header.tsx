@@ -14,6 +14,47 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState<any>(null);
   const [searchInput, setSearchInput] = React.useState("");
+  const [suggestions, setSuggestions] = React.useState<string[]>([]);
+  // Ambil data judul berita untuk autocomplete
+  React.useEffect(() => {
+    if (!searchInput) {
+      setSuggestions([]);
+      return;
+    }
+    // Ambil semua judul berita dari localStorage (atau dari newsData jika ingin statis)
+    let newsTitles: string[] = [];
+    try {
+      const newsData = JSON.parse(localStorage.getItem("newsData") || "[]");
+      if (Array.isArray(newsData)) {
+        newsTitles = newsData.map((n: any) => n.title);
+      }
+    } catch {
+      // fallback jika tidak ada di localStorage
+      newsTitles = [
+        "Inovasi AI Terbaru di Indonesia",
+        "Tim Nasional Lolos ke Final",
+        "Rupiah Menguat Terhadap Dollar",
+        "Startup Lokal Raih Pendanaan Besar",
+        "Atlet Muda Pecahkan Rekor Nasional",
+        "Ekspor UMKM Tembus Pasar Eropa",
+        "Debat Capres Berlangsung Sengit",
+        "Pemerintah Dorong Digitalisasi Desa",
+        "Indonesia Tuan Rumah Kejuaraan Asia",
+        "Pasar Saham Menguat di Awal Pekan",
+        "Gempa Besar Guncang Wilayah Barat Indonesia",
+        "Video Viral: Aksi Heroik di Tengah Banjir",
+        "Update Harga BBM Hari Ini",
+        "Fakta Unik: Indonesia Negara dengan Ribuan Pulau",
+        "Tips Belajar Efektif di Era Digital",
+        "Kisah Inspiratif: Anak Desa Raih Beasiswa Luar Negeri"
+      ];
+    }
+    // Filter judul yang mengandung input
+    const filtered = newsTitles.filter(title =>
+      title.toLowerCase().includes(searchInput.toLowerCase())
+    ).slice(0, 5);
+    setSuggestions(filtered);
+  }, [searchInput]);
 
   React.useEffect(() => {
     const user = localStorage.getItem("currentUser");
@@ -60,7 +101,7 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
           </button>
 
           {/* Search Bar */}
-          <form className="flex-1 max-w-md mx-8" onSubmit={handleSearch}>
+          <form className="flex-1 max-w-md mx-8" onSubmit={handleSearch} autoComplete="off">
             <div className="relative">
               <input
                 type="text"
@@ -68,7 +109,28 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
                 className="w-full px-4 py-2 rounded-full bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchInput}
                 onChange={e => setSearchInput(e.target.value)}
+                autoComplete="off"
               />
+              {/* Autocomplete suggestions */}
+              {suggestions.length > 0 && (
+                <ul className="absolute left-0 right-0 top-full bg-white border border-gray-200 rounded-b-lg shadow z-20 max-h-48 overflow-y-auto">
+                  {suggestions.map((s, i) => (
+                    <li
+                      key={i}
+                      className="px-4 py-2 text-gray-800 hover:bg-gray-100 cursor-pointer"
+                      onMouseDown={() => {
+                        setSearchInput(s);
+                        const params = new URLSearchParams(location.search);
+                        params.set("search", s);
+                        navigate({ pathname: location.pathname, search: params.toString() });
+                        setSuggestions([]);
+                      }}
+                    >
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black rounded-full p-2">
                 <Search className="text-white w-4 h-4" />
               </button>

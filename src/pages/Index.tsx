@@ -296,8 +296,9 @@ const Index = () => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=120&h=120&fit=crop" alt="Highlight" className="rounded-full border-4 border-white shadow-lg mb-2 w-24 h-24 object-cover" />
-                        <span className="text-white text-sm font-semibold">Highlight Hari Ini</span>
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=120&h=120&fit=crop" alt="Cuaca" className="rounded-full border-4 border-white shadow-lg mb-2 w-24 h-24 object-cover" />
+                        <span className="text-white text-sm font-semibold">Cuaca Hari Ini</span>
+                        <span className="text-white text-xs mt-1">Cerah Berawan, 29°C</span>
                       </div>
                     </div>
                   </div>
@@ -309,7 +310,7 @@ const Index = () => {
                 {recommendedNews.map((news, index) => (
                   <NewsCard key={index} {...news} />
                 ))}
-                <div className="bg-gradient-to-r from-red-500 to-yellow-400 text-white rounded-lg p-4 shadow-lg mt-8 animate-pulse">
+                <div className="bg-gradient-to-r from-red-500 to-yellow-400 text-white rounded-lg p-4 shadow-lg mt-8">
                   <div className="font-semibold text-base mb-2">Quotes Hari Ini</div>
                   <div className="italic">{randomQuote}</div>
                 </div>

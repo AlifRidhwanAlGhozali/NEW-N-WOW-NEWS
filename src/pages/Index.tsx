@@ -192,14 +192,35 @@ const Index = () => {
     ];
   }
 
-  // Filter by search term
-  const filteredNews = (selectedCategory === "Semua"
+  // Filter by search term (support hashtag to category mapping)
+  function mapTagToCategory(tag: string) {
+    switch (tag.toLowerCase()) {
+      case "breakingnews": return "Breaking News";
+      case "trending": return "Trending";
+      case "update": return "Update";
+      case "fakta": return "Fakta";
+      case "edukasi": return "Edukasi";
+      case "inspirasi": return "Inspirasi";
+      default: return tag;
+    }
+  }
+
+  let filteredNews = selectedCategory === "Semua"
     ? allNews
-    : allNews.filter((news) => news.category === selectedCategory)
-  ).filter((news) =>
-    news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    news.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    : allNews.filter((news) => news.category === selectedCategory);
+
+  if (searchTerm.startsWith('#')) {
+    // Jika searchTerm berupa hashtag, cocokkan dengan kategori
+    const tag = searchTerm.replace('#', '').toLowerCase();
+    const mappedCategory = mapTagToCategory(tag);
+    filteredNews = allNews.filter(news => news.category.toLowerCase() === mappedCategory.toLowerCase());
+  } else if (searchTerm) {
+    filteredNews = filteredNews.filter((news) =>
+      news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      news.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      news.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
 
   // Pagination logic
   let totalPages = Math.ceil(filteredNews.length / ITEMS_PER_PAGE);

@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { getCategoryColor } from "../utils/color";
 
 interface FeaturedNewsGridProps {
   newsList: Array<{
-    category: string;
+    categories: string[];
     title: string;
     excerpt: string;
     image: string;
@@ -26,7 +27,16 @@ const FeaturedNewsGrid = ({ newsList }: FeaturedNewsGridProps) => {
             className="w-full h-64 object-cover"
           />
           <div className="p-6">
-            <span className={`text-sm font-medium ${news.categoryColor}`}>{news.category}</span>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {news.categories.map((category, i) => (
+                <span
+                  key={i}
+                  className={`text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 ${getCategoryColor(category)}`}
+                >
+                  {category}
+                </span>
+              ))}
+            </div>
             <h2 className="text-2xl font-bold text-gray-800 mt-2 mb-3 line-clamp-2">{news.title}</h2>
             <p className="text-gray-600 mb-4 line-clamp-3">{news.excerpt}</p>
             <button

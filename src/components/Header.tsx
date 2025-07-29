@@ -1,21 +1,57 @@
 import { Search, User as UserIcon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import React from "react";
+import { useEffect, useRef } from "react";
 
 interface HeaderProps {
   onCategoryChange?: (category: string) => void;
   selectedCategory?: string;
+  categoryList?: string[];
 }
+ // fallback jika belum ada
 
-const categories = ["Semua", "Politik", "Olahraga", "Teknologi", "Bisnis"];
 
-const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) => {
+const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory, categoryList }) => {
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const categories = categoryList || ["Semua"];
+  const visibleCount = 4;
+  const visibleCategories = categories.slice(0, visibleCount);
+  const hiddenCategories = categories.slice(visibleCount);
+
+  const [showDropdown, setShowDropdown] = React.useState(false);
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = React.useState<any>(null);
   const [searchInput, setSearchInput] = React.useState("");
   const [suggestions, setSuggestions] = React.useState<string[]>([]);
   // Ambil data judul berita untuk autocomplete
+  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscKey);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscKey);
+    };
+  }, []);
+
+
   React.useEffect(() => {
     if (!searchInput) {
       setSuggestions([]);
@@ -138,8 +174,8 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
           </form>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-3">
-            {categories.map((cat) => (
+          <nav className="hidden md:flex items-center space-x-3 relative">
+            {visibleCategories.map((cat) => (
               <button
                 key={cat}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border focus:outline-none ${
@@ -150,14 +186,45 @@ const Header: React.FC<HeaderProps> = ({ onCategoryChange, selectedCategory }) =
                 onClick={() => {
                   if (cat === "Semua") navigate("/");
                   else navigate(`/?kategori=${cat.toLowerCase()}`);
-                  if (onCategoryChange) onCategoryChange(cat);
+                  onCategoryChange?.(cat);
                 }}
-                type="button"
               >
                 {cat}
               </button>
             ))}
+
+            {/* Dropdown toggle */}
+            {hiddenCategories.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="px-4 py-2 rounded-full bg-white text-black -800 border border-gray-300 hover:bg-red-50"
+                >
+                  Lainnya
+                </button>
+
+                {showDropdown && (
+                  <div ref={dropdownRef} className="absolute z-30 mt-2 bg-white border border-gray-300 rounded-md shadow-md right-0 w-40">
+                    {hiddenCategories.map((cat) => (
+                      <button
+                        key={cat}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                        onClick={() => {
+                          setShowDropdown(false);
+                          if (cat === "Semua") navigate("/");
+                          else navigate(`/?kategori=${cat.toLowerCase()}`);
+                          onCategoryChange?.(cat);
+                        }}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </nav>
+
 
           {/* User Info or Auth Buttons */}
           <div className="flex items-center space-x-3 ml-6">

@@ -14,7 +14,8 @@ const Akun = () => {
     fullName: user?.fullName || "",
     email: user?.email || "",
     phone: user?.phone || "",
-    photo: user?.photo || ""
+    photo: user?.photo || "",
+    userId: user?.id || "",
   });
   if (!user) {
     navigate("/login");
@@ -34,18 +35,62 @@ const Akun = () => {
     }
   };
 
-  const handleSave = () => {
-    // Update user in localStorage (both currentUser and users array)
-    setUser(form);
-    localStorage.setItem("currentUser", JSON.stringify(form));
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const idx = users.findIndex((u: any) => u.email === user.email);
-    if (idx !== -1) {
-      users[idx] = { ...users[idx], ...form };
-      localStorage.setItem("users", JSON.stringify(users));
+  const handleSave = async () => {
+  try {
+    let photoUrl = user.photo;
+
+    // upload file jika ada file baru
+    const file = fileInputRef.current?.files?.[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("photo", file);
+      formData.append("userId", user.id); // kirim ID user
+
+      const uploadRes = await fetch("http://localhost:3001/api/upload-photo", {
+        method: "POST",
+        body: formData,
+      });
+
+      const uploadData = await uploadRes.json();
+      if (!uploadRes.ok) {
+        alert(uploadData.error || "Upload foto gagal");
+        return;
+      }
+
+      photoUrl = uploadData.photo; // hasil: /galeri/7.jpg
     }
+
+    // update data user
+    const response = await fetch("http://localhost:3001/api/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...form, photo: photoUrl }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.error || "Gagal memperbarui profil.");
+      return;
+    }
+
+    // update localStorage
+    const updated =  {
+  id: user.id,
+  is_admin: user.is_admin,
+  email: form.email,
+  fullName: form.fullName,
+  phone: form.phone,
+  photo: photoUrl
+};;
+    setUser(updated);
+    localStorage.setItem("currentUser", JSON.stringify(updated));
     setEdit(false);
-  };
+    alert("Profil berhasil diperbarui!");
+  } catch (err) {
+    alert("Gagal menghubungi server.");
+  }
+};
+
 
   const handleDeletePhoto = () => {
     setForm((f) => ({ ...f, photo: "" }));
@@ -103,6 +148,7 @@ const Akun = () => {
                 placeholder="Email"
                 className="w-full mb-2 px-3 py-2 border rounded"
               />
+              <input type="hidden" name="userId" value={form.userId} />
               <input
                 type="text"
                 name="phone"

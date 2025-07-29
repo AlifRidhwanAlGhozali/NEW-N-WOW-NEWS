@@ -12,6 +12,7 @@ import Akun from "./pages/Akun";
 import KebijakanPrivasi from "./pages/KebijakanPrivasi";
 import SyaratKetentuan from "./pages/SyaratKetentuan";
 import Kontak from "./pages/Kontak";
+import AddNews from "./pages/AddNews";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/kebijakan-privasi" element={<KebijakanPrivasi />} />
           <Route path="/syarat-ketentuan" element={<SyaratKetentuan />} />
           <Route path="/kontak" element={<Kontak />} />
+          <Route path="/add-news" element={<AddNews />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
